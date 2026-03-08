@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Input = ({ type, name, placeholder }) => {
+const Input = ({ name, type, placeholder, value, onChange, error }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const isPassword = type === "password";
@@ -8,12 +8,15 @@ const Input = ({ type, name, placeholder }) => {
   return (
     <div className="relative">
       <input
-        className="border border-[#043277] rounded-md w-full px-3 py-2 pr-10 text-slate-700 focus:outline-none focus:border-[#043277] focus:ring-1 focus:ring-[#043277] placeholder:opacity-50"
+        className={`border border-[#043277] rounded-md w-full px-3 py-2 pr-10 text-slate-700 focus:outline-none focus:border-[#043277] focus:ring-1 focus:ring-[#043277] placeholder:opacity-50 ${error ? "border-red-500" : ""}`}
         type={isPassword ? (showPassword ? "text" : "password") : type}
         name={name}
         id={name}
+        value={value}
+        onChange={onChange}
         placeholder={placeholder}
       />
+      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
 
       {isPassword && (
         <button

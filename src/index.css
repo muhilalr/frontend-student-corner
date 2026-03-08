@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #043277;
+  --color-primary-hover: #00295a;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  display: inline-flex;
+}

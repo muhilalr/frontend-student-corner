@@ -4,6 +4,7 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LoginPage from "./pages/Auth/Login.jsx";
 import RegisterPage from "./pages/Auth/Register.jsx";
+import VerifyOtpPage from "./pages/Auth/VerifyOtp.jsx";
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <RegisterPage />,
+  },
+  {
+    path: "/verify-otp",
+    element: <VerifyOtpPage />,
   },
 ]);
 

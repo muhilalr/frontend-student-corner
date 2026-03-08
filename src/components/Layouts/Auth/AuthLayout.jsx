@@ -24,7 +24,7 @@ const Navigation = ({ type }) => {
         Belum punya akun?{" "}
         <Link
           to="/register"
-          className="font-semibold text-[#043277] hover:underline"
+          className="font-semibold text-primary hover:underline"
         >
           Daftar Sekarang
         </Link>
@@ -36,7 +36,7 @@ const Navigation = ({ type }) => {
         Sudah punya akun?{" "}
         <Link
           to="/login"
-          className="font-semibold text-[#043277] hover:underline"
+          className="font-semibold text-primary hover:underline"
         >
           Masuk Sekarang
         </Link>
