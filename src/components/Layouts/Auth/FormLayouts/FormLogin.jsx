@@ -1,5 +1,5 @@
-import Button from "../../Elements/Button/Index";
-import InputForm from "../../Elements/Input/Index";
+import Button from "../../../Elements/Button/Index";
+import InputForm from "../../../Fragments/InputForm/Index";
 
 const FormLogin = () => {
   return (
@@ -19,7 +19,7 @@ const FormLogin = () => {
       />
 
       <Button
-        classname="bg-[#043277] font-medium tracking-widest text-xs mt-5 w-full"
+        classname="bg-primary font-medium tracking-widest text-xs mt-5 w-full"
         type="submit"
       >
         MASUK

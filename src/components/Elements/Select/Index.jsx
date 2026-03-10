@@ -1,4 +1,4 @@
-import Label from "./Label";
+import Label from "../Label/Index";
 
 const Select = ({ label, name, options, value, onChange, error }) => {
   return (

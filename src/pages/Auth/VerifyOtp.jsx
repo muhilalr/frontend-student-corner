@@ -2,17 +2,50 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { resendOtp, verifyOtp } from "../../service/auth.service";
 import Button from "../../components/Elements/Button/Index";
+import { toast } from "react-toastify";
 
 const VerifyOtpPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const email = location.state?.email || "";
+  const { state, key: locationKey } = location; // Ambil locationKey untuk deteksi refresh!
+
+  // 1. Simpan email agar tahan banting saat di-refresh
+  const [email] = useState(() => {
+    const savedEmail = localStorage.getItem("otp_email");
+    if (state?.email) {
+      localStorage.setItem("otp_email", state.email);
+      return state.email;
+    }
+    return savedEmail || "";
+  });
 
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState(null);
-  const [info, setInfo] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [cooldown, setCooldown] = useState(0);
+
+  // 2. Logika Cooldown ANTI REFRESH NGULANG
+  const [cooldown, setCooldown] = useState(() => {
+    const savedExpiry = localStorage.getItem("otp_expiry");
+    const savedNavKey = sessionStorage.getItem("otp_nav_key");
+    const now = Date.now();
+
+    // CEK 1: Apakah ini navigasi BARU dari halaman register?
+    // Jika locationKey BERBEDA dengan yang disimpan, berarti INI BUKAN REFRESH
+    if (state?.fromRegister && savedNavKey !== locationKey) {
+      sessionStorage.setItem("otp_nav_key", locationKey); // Tandai sesi ini
+      const newExpiry = now + 60000;
+      localStorage.setItem("otp_expiry", newExpiry.toString());
+      return 60;
+    }
+
+    // CEK 2: Jika locationKey SAMA, berarti ini hasil REFRESH. Hitung sisa waktu!
+    if (savedExpiry) {
+      const remaining = Math.floor((parseInt(savedExpiry) - now) / 1000);
+      return remaining > 0 ? remaining : 0;
+    }
+
+    return 0;
+  });
 
   const inputRefs = useRef([]);
 
@@ -79,36 +112,38 @@ const VerifyOtpPage = () => {
 
     setLoading(true);
     setError(null);
-    setInfo(null);
 
-    try {
-      const response = await verifyOtp(email, otpCode);
+    const result = await verifyOtp(email, otpCode);
 
-      // Simpan token & redirect ke dashboard
-      localStorage.setItem("token", response.data.token);
+    if (result.success) {
+      // BERSENANG-SENANG LAH: Hapus semua jejak saat verifikasi berhasil!
+      localStorage.removeItem("otp_expiry");
+      localStorage.removeItem("otp_email");
+      sessionStorage.removeItem("otp_nav_key");
       navigate("/dashboard");
-    } catch (err) {
-      setError(err.response?.data?.message || "Verifikasi gagal. Coba lagi.");
+    } else {
+      setError(result.message);
       // Reset kotak OTP jika salah
       setOtp(["", "", "", "", "", ""]);
       inputRefs.current[0]?.focus();
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   const handleResend = async () => {
     setError(null);
-    setInfo(null);
 
-    try {
-      const response = await resendOtp(email);
-      setInfo(response.data.message);
+    const result = await resendOtp(email);
+
+    if (result.success) {
+      toast.success(result.data.message);
+      const newExpiry = Date.now() + 60000;
+      localStorage.setItem("otp_expiry", newExpiry.toString());
       setCooldown(60);
       setOtp(["", "", "", "", "", ""]);
       inputRefs.current[0]?.focus();
-    } catch (err) {
-      setError(err.response?.data?.message || "Gagal mengirim ulang OTP.");
+    } else {
+      toast.error(result.message);
     }
   };
 
@@ -151,16 +186,6 @@ const VerifyOtpPage = () => {
           ))}
         </div>
 
-        {/* Pesan error */}
-        {error && (
-          <p className="text-red-500 text-xs text-center mb-3">{error}</p>
-        )}
-
-        {/* Pesan sukses resend */}
-        {info && (
-          <p className="text-green-600 text-xs text-center mb-3">{info}</p>
-        )}
-
         {/* Tombol Verifikasi */}
         <Button
           type="submit"
@@ -179,13 +204,12 @@ const VerifyOtpPage = () => {
               <span className="font-semibold text-primary">{cooldown}s</span>
             </span>
           ) : (
-            <button
-              type="button"
+            <span
               onClick={handleResend}
               className="text-sm text-primary font-semibold hover:underline hover:cursor-pointer"
             >
               Kirim Ulang OTP
-            </button>
+            </span>
           )}
         </div>
 

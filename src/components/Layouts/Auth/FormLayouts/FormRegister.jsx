@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../../Elements/Button/Index";
-import InputForm from "../../Elements/Input/Index";
-import Select from "../../Elements/Input/Select";
-import { register } from "../../../service/auth.service";
 import { ColorRing } from "react-loader-spinner";
+import { register } from "../../../../service/auth.service";
+import InputForm from "../../../Fragments/InputForm/Index";
+import Button from "../../../Elements/Button/Index";
+import Select from "../../../Elements/Select/Index";
 
 const FormRegister = () => {
   const navigate = useNavigate();
@@ -39,22 +39,17 @@ const FormRegister = () => {
     setLoading(true);
     setErrors({});
 
-    try {
-      // Tidak ada foto → pakai JSON biasa, tidak perlu FormData
-      const response = await register(form);
+    const result = await register(form);
 
+    if (result.success) {
       navigate("/verify-otp", {
-        state: { email: response.email },
+        state: { email: result.email, fromRegister: true },
       });
-    } catch (err) {
-      if (err.response?.status === 422) {
-        setErrors(err.response.data.errors);
-      } else {
-        setErrors({ general: ["Terjadi kesalahan. Silakan coba lagi."] });
-      }
-    } finally {
-      setLoading(false);
+    } else {
+      setErrors(result.errors);
     }
+
+    setLoading(false);
   };
 
   return (

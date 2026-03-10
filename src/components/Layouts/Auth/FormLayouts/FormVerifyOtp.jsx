@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Button from "../../Elements/Button/Index";
-import api from "../../../lib/axios";
+import { toast } from "react-toastify";
+import Button from "../../../Elements/Button/Index";
+import { resendOtp, verifyOtp } from "../../../../service/auth.service";
 
 const FormVerifyOtp = () => {
   const navigate = useNavigate();
@@ -10,7 +11,6 @@ const FormVerifyOtp = () => {
 
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState(null);
-  const [info, setInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
 
@@ -79,39 +79,32 @@ const FormVerifyOtp = () => {
 
     setLoading(true);
     setError(null);
-    setInfo(null);
 
-    try {
-      const response = await api.post("/auth/verify-otp", {
-        email,
-        otp_code: otpCode,
-      });
+    const result = await verifyOtp(email, otpCode);
 
-      // Simpan token & redirect ke dashboard
-      localStorage.setItem("token", response.data.token);
+    if (result.success) {
       navigate("/dashboard");
-    } catch (err) {
-      setError(err.response?.data?.message || "Verifikasi gagal. Coba lagi.");
+    } else {
+      setError(result.message);
       // Reset kotak OTP jika salah
       setOtp(["", "", "", "", "", ""]);
       inputRefs.current[0]?.focus();
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   const handleResend = async () => {
     setError(null);
-    setInfo(null);
 
-    try {
-      const response = await api.post("/auth/resend-otp", { email });
-      setInfo(response.data.message);
+    const result = await resendOtp(email);
+
+    if (result.success) {
+      toast.success(result.data.message);
       setCooldown(60);
       setOtp(["", "", "", "", "", ""]);
       inputRefs.current[0]?.focus();
-    } catch (err) {
-      setError(err.response?.data?.message || "Gagal mengirim ulang OTP.");
+    } else {
+      toast.error(result.message);
     }
   };
 
@@ -120,7 +113,7 @@ const FormVerifyOtp = () => {
       {/* Info email tujuan */}
       <p className="text-sm text-gray-500 text-center mb-6">
         Kode OTP telah dikirim ke{" "}
-        <span className="font-semibold text-[#043277]">{email}</span>
+        <span className="font-semibold text-primary">{email}</span>
       </p>
 
       {/* 6 Kotak OTP */}
@@ -137,28 +130,18 @@ const FormVerifyOtp = () => {
             onKeyDown={(e) => handleKeyDown(index, e)}
             onPaste={handlePaste}
             className={`w-11 h-12 text-center text-xl font-bold border-2 rounded-lg outline-none transition-all
-              ${digit ? "border-[#043277] bg-blue-50" : "border-gray-300"}
+              ${digit ? "border-primary bg-blue-50" : "border-gray-300"}
               ${error ? "border-red-400 bg-red-50" : ""}
-              focus:border-[#043277] focus:ring-2 focus:ring-blue-100`}
+              focus:border-primary focus:ring-2 focus:ring-blue-100`}
             autoFocus={index === 0}
           />
         ))}
       </div>
 
-      {/* Pesan error */}
-      {error && (
-        <p className="text-red-500 text-xs text-center mb-3">{error}</p>
-      )}
-
-      {/* Pesan sukses resend */}
-      {info && (
-        <p className="text-green-600 text-xs text-center mb-3">{info}</p>
-      )}
-
       {/* Tombol Verifikasi */}
       <Button
         type="submit"
-        classname="bg-[#043277] font-medium tracking-widest text-xs w-full"
+        classname="bg-primary font-medium tracking-widest text-xs w-full"
         disabled={loading || otpCode.length !== 6}
       >
         {loading ? "MEMVERIFIKASI..." : "VERIFIKASI"}
@@ -170,13 +153,13 @@ const FormVerifyOtp = () => {
         {cooldown > 0 ? (
           <span className="text-xs text-gray-400">
             Kirim ulang dalam{" "}
-            <span className="font-semibold text-[#043277]">{cooldown}s</span>
+            <span className="font-semibold text-primary">{cooldown}s</span>
           </span>
         ) : (
           <button
             type="button"
             onClick={handleResend}
-            className="text-xs text-[#043277] font-semibold hover:underline"
+            className="text-xs text-primary font-semibold hover:underline"
           >
             Kirim Ulang OTP
           </button>

@@ -1,19 +1,56 @@
 import api from "../lib/axios";
 
 export const register = async (form) => {
-  const res = await api.post("/auth/register", form);
-  return res.data; // { message, email }
+  try {
+    const res = await api.post("/auth/register", form);
+
+    return {
+      success: true,
+      email: res.data.email,
+    };
+  } catch (err) {
+    const errorData =
+      err.response?.status === 422
+        ? err.response.data.errors
+        : { general: ["Terjadi kesalahan. Silakan coba lagi."] };
+
+    return {
+      success: false,
+      errors: errorData,
+    };
+  }
 };
 
 export const verifyOtp = async (email, otp_code) => {
-  const res = await api.post("/auth/verify-otp", { email, otp_code });
-  localStorage.setItem("token", res.data.token);
-  return res.data;
+  try {
+    const res = await api.post("/auth/verify-otp", { email, otp_code });
+
+    localStorage.setItem("token", res.data.token);
+    return {
+      success: true,
+      data: res.data,
+    };
+  } catch (err) {
+    return {
+      success: false,
+      message: err.response?.data?.message || "Verifikasi gagal. Coba lagi.",
+    };
+  }
 };
 
 export const resendOtp = async (email) => {
-  const res = await api.post("/auth/resend-otp", { email });
-  return res.data;
+  try {
+    const res = await api.post("/auth/resend-otp", { email });
+    return {
+      success: true,
+      data: res.data,
+    };
+  } catch (err) {
+    return {
+      success: false,
+      message: err.response?.data?.message || "Gagal mengirim ulang OTP.",
+    };
+  }
 };
 
 export const login = async (email, password) => {
