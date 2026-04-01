@@ -6,8 +6,13 @@ import LoginPage from "./pages/Auth/Login.jsx";
 import RegisterPage from "./pages/Auth/Register.jsx";
 import VerifyOtpPage from "./pages/Auth/VerifyOtp.jsx";
 import { Bounce, ToastContainer } from "react-toastify";
+import HomePage from "./pages/Home.jsx";
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />,
+  },
   {
     path: "/login",
     element: <LoginPage />,

@@ -1,8 +1,11 @@
 @import "tailwindcss";
+@plugin "daisyui";
 
 @theme {
-  --color-primary: #043277;
-  --color-primary-hover: #00295a;
+  --color-utama: #043277;
+  --color-utama-hover: #00295a;
+  --color-second: #00cc83;
+  --color-second-hover: #02a66b;
 }
 
 /* HTML: <div class="loader"></div> */

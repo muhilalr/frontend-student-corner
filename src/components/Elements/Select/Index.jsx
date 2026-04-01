@@ -1,15 +1,14 @@
+import { forwardRef } from "react";
 import Label from "../Label/Index";
 
-const Select = ({ label, name, options, value, onChange, error }) => {
+const Select = forwardRef(({ label, options, error, ...rest }, ref) => {
   return (
     <div className="mb-4">
       <Label htmlFor={name}>{label}</Label>
 
       <select
-        name={name}
-        id={name}
-        value={value}
-        onChange={onChange}
+        ref={ref}
+        {...rest}
         className="w-full px-3 py-2 text-slate-700 border border-primary rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
       >
         <option value="">-- Pilih Jenis Kelamin --</option>
@@ -24,6 +23,8 @@ const Select = ({ label, name, options, value, onChange, error }) => {
       {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
     </div>
   );
-};
+});
+
+Select.displayName = "Select";
 
 export default Select;

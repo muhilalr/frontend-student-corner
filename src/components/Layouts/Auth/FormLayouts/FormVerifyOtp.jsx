@@ -75,7 +75,10 @@ const FormVerifyOtp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (otpCode.length !== 6) return;
+    if (otpCode.length !== 6) {
+      setError("Kode OTP harus terdiri dari 6 digit");
+      return;
+    }
 
     setLoading(true);
     setError(null);
@@ -83,7 +86,7 @@ const FormVerifyOtp = () => {
     const result = await verifyOtp(email, otpCode);
 
     if (result.success) {
-      navigate("/dashboard");
+      navigate("/");
     } else {
       setError(result.message);
       // Reset kotak OTP jika salah
@@ -137,6 +140,10 @@ const FormVerifyOtp = () => {
           />
         ))}
       </div>
+
+      {error && (
+        <p className="text-red-500 text-xs text-center mb-4">{error}</p>
+      )}
 
       {/* Tombol Verifikasi */}
       <Button
