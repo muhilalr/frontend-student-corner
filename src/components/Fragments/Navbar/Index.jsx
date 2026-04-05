@@ -1,56 +1,21 @@
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import Dropdown from "../Dropdown/Index";
 import bps from "../../../assets/logo-bps.jpg";
 
-const subjectItems = [
-  {
-    label: "Subjek 1",
-    materials: [
-      { label: "Materi 1", to: "/subjects/subjek-1/materi-1" },
-      { label: "Materi 2", to: "/subjects/subjek-1/materi-2" },
-      { label: "Materi 3", to: "/subjects/subjek-1/materi-3" },
-      { label: "Materi 4", to: "/subjects/subjek-1/materi-4" },
-      { label: "Materi 5", to: "/subjects/subjek-1/materi-5" },
-    ],
-  },
-  {
-    label: "Subjek 2",
-    materials: [
-      { label: "Materi 1", to: "/subjects/subjek-2/materi-1" },
-      { label: "Materi 2", to: "/subjects/subjek-2/materi-2" },
-      { label: "Materi 3", to: "/subjects/subjek-2/materi-3" },
-      { label: "Materi 4", to: "/subjects/subjek-2/materi-4" },
-      { label: "Materi 5", to: "/subjects/subjek-2/materi-5" },
-    ],
-  },
-];
-
-const navItems = [
-  { label: "Home", to: "/" },
-  { label: "Login", to: "/login" },
-  { label: "Register", to: "/register" },
-];
-
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSubjectMenuOpen, setIsSubjectMenuOpen] = useState(false);
-  const [expandedSubject, setExpandedSubject] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
     setIsMenuOpen(false);
-    setIsSubjectMenuOpen(false);
-    setExpandedSubject(null);
   }, [location.pathname]);
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
         setIsMenuOpen(false);
-        setIsSubjectMenuOpen(false);
-        setExpandedSubject(null);
       }
     };
 
@@ -72,31 +37,13 @@ const Navbar = () => {
     };
   }, [isMenuOpen]);
 
-  const toggleSubject = (label) => {
-    setExpandedSubject((prev) => (prev === label ? null : label));
-  };
-
-  const toggleMobileSubjectMenu = () => {
-    setIsSubjectMenuOpen((prev) => {
-      const next = !prev;
-
-      if (!next) {
-        setExpandedSubject(null);
-      }
-
-      return next;
-    });
-  };
-
   const closeMobileMenu = () => {
     setIsMenuOpen(false);
-    setIsSubjectMenuOpen(false);
-    setExpandedSubject(null);
   };
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white">
         <nav className="mx-auto flex items-center justify-between py-4 px-6 lg:px-8">
           <Link to="/" className="flex items-center gap-2">
             <img src={bps} alt="SC" width={50} className="relative top-0.5" />
@@ -147,7 +94,7 @@ const Navbar = () => {
 
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-xl border border-slate-200 p-2 text-slate-700 transition hover:bg-slate-100 md:hidden"
+            className="inline-flex items-center justify-center rounded-xl border border-slate-200 p-2 text-slate-700 transition hover:bg-slate-100 hover:cursor-pointer md:hidden"
             onClick={() => setIsMenuOpen(true)}
             aria-expanded={isMenuOpen}
             aria-label="Open navigation menu"
@@ -187,14 +134,18 @@ const Navbar = () => {
         aria-hidden={!isMenuOpen}
       >
         <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-          <div>
-            <p className="text-base font-bold text-slate-900">Menu</p>
-            <p className="text-xs text-slate-500">Navigasi Student Corner</p>
-          </div>
+          <Link to="/" className="flex items-center gap-2">
+            <img src={bps} alt="SC" width={50} className="relative top-0.5" />
+
+            <p className="text-lg leading-none font-bold text-utama">
+              Pojok Literasi <br />
+              Statistik
+            </p>
+          </Link>
 
           <button
             type="button"
-            className="rounded-xl border border-slate-200 p-2 text-slate-700 transition hover:bg-slate-100"
+            className="rounded-xl border border-slate-200 p-2 text-slate-700 transition hover:bg-slate-100 hover:cursor-pointer"
             onClick={closeMobileMenu}
             aria-label="Close navigation menu"
           >
@@ -217,91 +168,92 @@ const Navbar = () => {
 
         <div className="flex-1 overflow-y-auto px-4 py-4">
           <div className="flex flex-col gap-2">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                className={({ isActive }) =>
-                  `rounded-xl px-4 py-3 font-medium transition-colors duration-200 ${
-                    isActive
-                      ? "bg-blue-50 text-primary"
-                      : "text-slate-700 hover:bg-slate-50"
-                  }`
-                }
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `rounded-md px-4 py-3 font-semibold transition-colors duration-200 ${
+                  isActive
+                    ? "bg-blue-50 text-utama"
+                    : "text-slate-700 hover:bg-gray-100"
+                }`
+              }
+            >
+              Home
+            </NavLink>
+
+            <details
+              className="collapse bg-base-100 border border-base-300 group"
+              name="my-accordion-det-1"
+            >
+              <summary className="collapse-title text-slate-700 font-semibold after:absolute after:right-6 after:top-1/2 after:h-2 after:w-2 after:-translate-y-1/2 after:rotate-45 after:border-b-2 after:border-r-2 after:content-[''] [&::-webkit-details-marker]:hidden group-open:after:-rotate-135">
+                Konten Edukasi
+              </summary>
+              <div className="collapse-content">
+                <button className="w-full rounded-md px-4 py-2 text-left text-sm text-gray-600 hover:cursor-pointer hover:bg-gray-50">
+                  Click
+                </button>
+              </div>
+            </details>
+            <details
+              className="collapse bg-base-100 border border-base-300 group"
+              name="my-accordion-det-1"
+            >
+              <summary className="collapse-title text-slate-700 font-semibold after:absolute after:right-6 after:top-1/2 after:h-2 after:w-2 after:-translate-y-1/2 after:rotate-45 after:border-b-2 after:border-r-2 after:content-[''] [&::-webkit-details-marker]:hidden group-open:after:-rotate-135">
+                Alat Interaktif
+              </summary>
+              <div className="collapse-content">
+                <button className="w-full rounded-md px-4 py-2 text-left text-sm text-gray-600 hover:cursor-pointer hover:bg-gray-50">
+                  Kalkulator Statistik
+                </button>
+                <button className="w-full rounded-md px-4 py-2 text-left text-sm text-gray-600 hover:cursor-pointer hover:bg-gray-50">
+                  Visualisasi Data
+                </button>
+                <button className="w-full rounded-md px-4 py-2 text-left text-sm text-gray-600 hover:cursor-pointer hover:bg-gray-50">
+                  Simulasi Statistik
+                </button>
+              </div>
+            </details>
+
+            <NavLink
+              to="/login"
+              className={({ isActive }) =>
+                `rounded-md px-4 py-3 font-semibold transition-colors duration-200 ${
+                  isActive
+                    ? "bg-blue-50 text-utama"
+                    : "text-slate-700 hover:bg-gray-100"
+                }`
+              }
+            >
+              Kuis & Tantangan
+            </NavLink>
+
+            <details
+              className="collapse bg-base-100 border border-base-300 group"
+              name="my-accordion-det-1"
+            >
+              <summary className="collapse-title text-slate-700 font-semibold after:absolute after:right-6 after:top-1/2 after:h-2 after:w-2 after:-translate-y-1/2 after:rotate-45 after:border-b-2 after:border-r-2 after:content-[''] [&::-webkit-details-marker]:hidden group-open:after:-rotate-135">
+                Magang dan Riset
+              </summary>
+              <div className="collapse-content">
+                <button className="w-full rounded-md px-4 py-2 text-left text-sm text-gray-600 hover:cursor-pointer hover:bg-gray-50">
+                  Program Magang
+                </button>
+                <button className="w-full rounded-md px-4 py-2 text-left text-sm text-gray-600 hover:cursor-pointer hover:bg-gray-50">
+                  Kolaborasi Riset Mandiri
+                </button>
+              </div>
+            </details>
+
+            <div className="mt-6 border-t border-gray-200 pt-4">
+              <Link
+                to="/login"
+                className="block w-full rounded-md bg-second px-4 py-3 text-center font-medium text-white transition-colors duration-200 hover:bg-second-hover"
+                onClick={closeMobileMenu}
               >
-                {item.label}
-              </NavLink>
-            ))}
-
-            <div className="rounded-2xl border border-slate-200 p-2">
-              <button
-                type="button"
-                className="flex w-full items-center justify-between px-2 py-2 text-left text-sm font-semibold text-slate-900"
-                onClick={toggleMobileSubjectMenu}
-                aria-expanded={isSubjectMenuOpen}
-              >
-                Subjek Materi
-                <ChevronDown
-                  className={`h-4 w-4 transition-transform duration-200 ${
-                    isSubjectMenuOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-
-              {isSubjectMenuOpen && (
-                <div className="mt-2 flex flex-col gap-2">
-                  {subjectItems.map((subject) => {
-                    const isExpanded = expandedSubject === subject.label;
-
-                    return (
-                      <div
-                        key={subject.label}
-                        className="rounded-xl bg-slate-50"
-                      >
-                        <button
-                          type="button"
-                          className="flex w-full items-center justify-between px-4 py-3 text-left font-medium text-slate-700"
-                          onClick={() => toggleSubject(subject.label)}
-                          aria-expanded={isExpanded}
-                        >
-                          {subject.label}
-                          <ChevronDown
-                            className={`h-4 w-4 transition-transform duration-200 ${
-                              isExpanded ? "rotate-180" : ""
-                            }`}
-                          />
-                        </button>
-
-                        {isExpanded && (
-                          <div className="space-y-1 px-3 pb-3">
-                            {subject.materials.map((material) => (
-                              <Link
-                                key={material.to}
-                                to={material.to}
-                                className="block rounded-xl bg-white px-4 py-3 text-sm font-medium text-slate-600 transition-colors duration-200 hover:bg-blue-50 hover:text-primary"
-                              >
-                                {material.label}
-                              </Link>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+                Login
+              </Link>
             </div>
           </div>
-        </div>
-
-        <div className="border-t border-slate-200 p-4">
-          <Link
-            to="/login"
-            className="block rounded-xl bg-second px-4 py-3 text-center font-semibold text-white transition-colors duration-200 hover:bg-second-hover"
-            onClick={closeMobileMenu}
-          >
-            Mulai Sekarang
-          </Link>
         </div>
       </aside>
     </>

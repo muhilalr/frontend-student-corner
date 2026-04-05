@@ -122,7 +122,7 @@ const FormRegister = () => {
 
       <Button
         type="submit"
-        classname="bg-primary font-medium tracking-widest text-xs mt-5 w-full hover:bg-primary-hover flex justify-center items-center"
+        classname="bg-utama font-medium tracking-widest text-xs mt-5 w-full hover:bg-utama-hover flex justify-center items-center"
         disabled={isSubmitting}
       >
         {isSubmitting ? "MEMPROSES..." : "DAFTAR"}{" "}

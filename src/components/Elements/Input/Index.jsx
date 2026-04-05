@@ -13,7 +13,7 @@ const Input = forwardRef(
         <div className="relative">
           <input
             ref={ref} // ✅ wajib untuk RHF
-            className={`border border-primary rounded-md w-full px-3 py-2 pr-10 text-slate-700 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:opacity-50 ${
+            className={`border border-utama rounded-md w-full px-3 py-2 pr-10 text-slate-700 focus:outline-none focus:border-utama focus:ring-1 focus:ring-utama placeholder:opacity-50 ${
               error ? "border-red-500" : ""
             }`}
             type={isPassword ? (showPassword ? "text" : "password") : type}

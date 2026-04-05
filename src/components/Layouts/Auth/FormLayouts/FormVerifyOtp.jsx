@@ -116,7 +116,7 @@ const FormVerifyOtp = () => {
       {/* Info email tujuan */}
       <p className="text-sm text-gray-500 text-center mb-6">
         Kode OTP telah dikirim ke{" "}
-        <span className="font-semibold text-primary">{email}</span>
+        <span className="font-semibold text-utama">{email}</span>
       </p>
 
       {/* 6 Kotak OTP */}
@@ -133,9 +133,9 @@ const FormVerifyOtp = () => {
             onKeyDown={(e) => handleKeyDown(index, e)}
             onPaste={handlePaste}
             className={`w-11 h-12 text-center text-xl font-bold border-2 rounded-lg outline-none transition-all
-              ${digit ? "border-primary bg-blue-50" : "border-gray-300"}
+              ${digit ? "border-utama bg-blue-50" : "border-gray-300"}
               ${error ? "border-red-400 bg-red-50" : ""}
-              focus:border-primary focus:ring-2 focus:ring-blue-100`}
+              focus:border-utama focus:ring-2 focus:ring-blue-100`}
             autoFocus={index === 0}
           />
         ))}
@@ -148,7 +148,7 @@ const FormVerifyOtp = () => {
       {/* Tombol Verifikasi */}
       <Button
         type="submit"
-        classname="bg-primary font-medium tracking-widest text-xs w-full"
+        classname="bg-utama font-medium tracking-widest text-xs w-full"
         disabled={loading || otpCode.length !== 6}
       >
         {loading ? "MEMVERIFIKASI..." : "VERIFIKASI"}
@@ -160,13 +160,13 @@ const FormVerifyOtp = () => {
         {cooldown > 0 ? (
           <span className="text-xs text-gray-400">
             Kirim ulang dalam{" "}
-            <span className="font-semibold text-primary">{cooldown}s</span>
+            <span className="font-semibold text-utama">{cooldown}s</span>
           </span>
         ) : (
           <button
             type="button"
             onClick={handleResend}
-            className="text-xs text-primary font-semibold hover:underline"
+            className="text-xs text-utama font-semibold hover:underline"
           >
             Kirim Ulang OTP
           </button>

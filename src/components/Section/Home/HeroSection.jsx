@@ -1,5 +1,16 @@
+import { useEffect } from "react";
 import assetHero from "../../../assets/Analysis-cuate.svg";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 const HeroSection = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1500,
+      once: true, // Animasi berjalan sekali saja
+    });
+  }, []);
+
   return (
     <>
       <section className="bg-white">
@@ -8,7 +19,6 @@ const HeroSection = () => {
             {/* Left Content */}
             <div
               data-aos="fade-right"
-              data-aos-duration="1000"
               className="mb-10 w-full text-center md:text-left md:mb-0 md:w-1/2"
             >
               <h1 className="mb-4 text-4xl lg:text-5xl font-bold text-utama">
@@ -23,13 +33,9 @@ const HeroSection = () => {
             </div>
 
             {/* Right Content and Illustration */}
-            <div
-              data-aos="fade-left"
-              data-aos-duration="1500"
-              className="relative w-full md:w-1/2"
-            >
+            <div data-aos="fade-left" className="relative w-full md:w-1/2">
               {/* Orange Circles */}
-              <div className="absolute -top-6 -right-6 h-40 w-40 sm:h-64 sm:w-64 rounded-full bg-orange-100 opacity-50"></div>
+              <div className="absolute -top-6 -right-4 h-40 w-40 sm:h-64 sm:w-64 rounded-full bg-orange-100 opacity-50"></div>
 
               {/* Small Orange Circles */}
               <div className="absolute top-12 left-12 h-4 w-4 rounded-full bg-orange-200 hidden sm:block"></div>

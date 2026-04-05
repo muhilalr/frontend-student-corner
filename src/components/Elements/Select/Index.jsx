@@ -9,7 +9,7 @@ const Select = forwardRef(({ label, options, error, ...rest }, ref) => {
       <select
         ref={ref}
         {...rest}
-        className="w-full px-3 py-2 text-slate-700 border border-primary rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
+        className="w-full px-3 py-2 text-slate-700 border border-utama rounded-md focus:outline-none focus:ring-1 focus:ring-utama"
       >
         <option value="">-- Pilih Jenis Kelamin --</option>
 

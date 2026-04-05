@@ -24,7 +24,7 @@ const Navigation = ({ type }) => {
         Belum punya akun?{" "}
         <Link
           to="/register"
-          className="font-semibold text-primary hover:underline"
+          className="font-semibold text-utama hover:underline"
         >
           Daftar Sekarang
         </Link>
@@ -34,10 +34,7 @@ const Navigation = ({ type }) => {
     return (
       <p className="text-base text-center mt-3.5">
         Sudah punya akun?{" "}
-        <Link
-          to="/login"
-          className="font-semibold text-primary hover:underline"
-        >
+        <Link to="/login" className="font-semibold text-utama hover:underline">
           Masuk Sekarang
         </Link>
       </p>

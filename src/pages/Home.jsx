@@ -1,12 +1,22 @@
 import Navbar from "../components/Fragments/Navbar/Index.jsx";
+import AlatInteraktifSection from "../components/Section/Home/AlatInteraktifSection.jsx";
+import FooterSection from "../components/Section/Home/FooterSection.jsx";
 import HeroSection from "../components/Section/Home/HeroSection.jsx";
+import KontenEdukasiSection from "../components/Section/Home/KontenEdukasiSection.jsx";
+import KuisSection from "../components/Section/Home/KuisSection.jsx";
+import MagangSection from "../components/Section/Home/MagangSection.jsx";
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <>
       <Navbar />
       <HeroSection />
-    </div>
+      <KontenEdukasiSection />
+      <AlatInteraktifSection />
+      <KuisSection />
+      <MagangSection />
+      <FooterSection />
+    </>
   );
 };
 

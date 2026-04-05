@@ -19,7 +19,7 @@ const FormLogin = () => {
       />
 
       <Button
-        classname="bg-primary font-medium tracking-widest text-xs mt-5 w-full"
+        classname="bg-utama font-medium tracking-widest text-xs mt-5 w-full"
         type="submit"
       >
         MASUK
